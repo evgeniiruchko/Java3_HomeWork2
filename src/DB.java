@@ -31,7 +31,9 @@ public class DB {
     }
 
     public static void changeNick(String oldNick,String newNick) throws SQLException {
-        resultSet = statement.executeQuery("SELECT nickname FROM users WHERE nickname='" + newNick + "'");
+        PreparedStatement ps = connection.prepareStatement("SELECT nickname FROM users WHERE nickname=?");
+        ps.setString(1, newNick);
+        resultSet = ps.executeQuery();
         if (!resultSet.next()) {
             statement.execute("UPDATE users SET nickname = '" + newNick + "' WHERE nickname = '" + oldNick + "'");
             System.out.println("Ник успешно поменян");
